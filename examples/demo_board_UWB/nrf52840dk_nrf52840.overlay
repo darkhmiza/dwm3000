@@ -25,7 +25,10 @@
 };
 
 
-
+/*
+Ovelay file for the U-blox XPLR-IOT-1 board
+based on the Nordic nrf53dk board
+ */
 
 
 
@@ -103,6 +106,5 @@
 &spi1{
     status = "disabled";
 };
-
 
  

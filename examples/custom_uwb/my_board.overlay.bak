@@ -25,7 +25,10 @@
 };
 
 
-
+/*
+Ovelay file for the U-blox XPLR-IOT-1 board
+based on the Nordic nrf53dk board
+ */
 
 
 
@@ -43,6 +46,24 @@
 		group1 {
 			psels = <NRF_PSEL(TWIM_SDA, 0, 15)>,
 				<NRF_PSEL(TWIM_SCL, 0, 16)>;
+			low-power-enable;
+		};
+	};
+	
+	
+		spi2_default: spi2_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 25)>,
+					<NRF_PSEL(SPIM_MOSI, 0, 14)>,
+					<NRF_PSEL(SPIM_MISO, 0, 13)>;
+		};
+	};
+
+	spi2_sleep: spi2_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 25)>,
+					<NRF_PSEL(SPIM_MOSI, 0, 14)>,
+					<NRF_PSEL(SPIM_MISO, 0, 13)>;
 			low-power-enable;
 		};
 	};
@@ -100,9 +121,21 @@
  };
  
  
-&spi1{
-    status = "disabled";
+&spi2{
+        status = "okay";
+        cs-gpios = <&gpio0 28 GPIO_ACTIVE_LOW>;
+
+        sdhc0: sdhc@0 {
+                compatible = "zephyr,mmc-spi-slot";
+                reg = <0>;
+                status = "okay";
+                label = "SDHC0";
+                spi-max-frequency = <24000000>;
+        };
 };
 
+&spi1{
+	status = "disabled";
+}
 
  

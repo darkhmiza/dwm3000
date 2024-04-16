@@ -21,11 +21,11 @@
 #include <port.h>
 
 /* zephyr includes */
-#include <zephyr/kernel.h>
-#include <zephyr/sys/printk.h>
+#include <zephyr.h>
+#include <sys/printk.h>
 
 #define LOG_LEVEL 3
-#include <zephyr/logging/log.h>
+#include <logging/log.h>
 LOG_MODULE_REGISTER(read_devid);
 
 
@@ -37,8 +37,9 @@ LOG_MODULE_REGISTER(read_devid);
  */
 int app_main(void)
 {
-    int err;
 
+    printk("Decawave good");
+    int err;
     /* Display application name on LCD. */
     LOG_INF(APP_NAME);
 
@@ -57,12 +58,27 @@ int app_main(void)
      * returns DWT_ERROR if it does not match expected else DWT_SUCCESS 
      */
     err = dwt_check_dev_id();
+    
     if (err == DWT_SUCCESS) {
         LOG_INF("DEV ID OK");
     }
     else {
         LOG_ERR("DEV ID FAILED");
     }
+
+     while (!dwt_checkidlerc()) { 
+/* spin */
+ };
+
+ if (dwt_initialise(DWT_DW_INIT) == DWT_ERROR) {
+        LOG_ERR("INIT FAILED");
+        while (1) { /* spin */ };
+    }
+    //dwt_setleds(DWT_LEDS_ENABLE | DWT_LEDS_INIT_BLINK) ;
+
+    /* Enabling LEDs here for debug so that for each TX the D1 LED will flash
+     * on DW3000 red eval-shield boards. */
+printk("DWM3000 GOOD\n");
 
     return err;
 }
