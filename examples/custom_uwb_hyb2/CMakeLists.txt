@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 cmake_minimum_required(VERSION 3.20.0)
-set(ENV{UBXLIB_DIR} $../../../ubxlib)
+set(ENV{UBXLIB_DIR} ${CMAKE_CURRENT_LIST_DIR}/ubxlib)
 include($ENV{UBXLIB_DIR}/zephyr/ubxlib.cmake)
 
 set(DTS_ROOT   "${CMAKE_CURRENT_SOURCE_DIR}/../..")
@@ -32,7 +32,7 @@ target_include_directories(app PRIVATE ../../platform/)
 target_include_directories(app PRIVATE ../../compiler/)
 target_include_directories(app PRIVATE ../../shared_data/)
 
-file(REAL_PATH "$../../../ubxlib/common" APP_COMMON_DIR)
+file(REAL_PATH "${CMAKE_CURRENT_LIST_DIR}/common" APP_COMMON_DIR)
 file(GLOB APP_COMMONS "${APP_COMMON_DIR}/*.c")
 target_sources(app PRIVATE ${APP_COMMONS})
 target_include_directories(app PRIVATE ${APP_COMMON_DIR})

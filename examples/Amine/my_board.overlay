@@ -1,0 +1,141 @@
+// To get started, press Ctrl+Space to bring up the completion menu and view the available nodes.
+
+// You can also use the buttons in the sidebar to perform actions on nodes.
+// Actions currently available include:
+
+// * Enabling / disabling the node
+// * Adding the bus to a bus
+// * Removing the node
+// * Connecting ADC channels
+
+// For more help, browse the DeviceTree documentation at https://docs.zephyrproject.org/latest/guides/dts/index.html
+// You can also visit the nRF DeviceTree extension documentation at https://nrfconnect.github.io/vscode-nrf-connect/devicetree/nrfdevicetree.html
+
+&i2c1 {
+    compatible = "nordic,nrf-twim";
+    status = "okay";
+	pinctrl-0 = <&i2c1_default>;
+	pinctrl-1 = <&i2c1_sleep>;
+	pinctrl-names = "default", "sleep";
+    mysensor: mysensor@42{
+        compatible = "i2c-device";
+        reg = < 0x42 >;
+        label = "MYSENSOR";
+    };
+};
+
+
+/*
+Ovelay file for the U-blox XPLR-IOT-1 board
+based on the Nordic nrf53dk board
+ */
+
+
+
+ // I2C and the board sensors
+
+ &pinctrl{
+    i2c0_default: i2c0_default {
+		group1 {
+			psels = <NRF_PSEL(TWIM_SDA, 0, 15)>,
+				<NRF_PSEL(TWIM_SCL, 0, 16)>;
+		};
+	};
+
+	i2c0_sleep: i2c0_sleep {
+		group1 {
+			psels = <NRF_PSEL(TWIM_SDA, 0, 15)>,
+				<NRF_PSEL(TWIM_SCL, 0, 16)>;
+			low-power-enable;
+		};
+	};
+	
+	
+		spi2_default: spi2_default {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 25)>,
+					<NRF_PSEL(SPIM_MOSI, 0, 14)>,
+					<NRF_PSEL(SPIM_MISO, 0, 13)>;
+		};
+	};
+
+	spi2_sleep: spi2_sleep {
+		group1 {
+			psels = <NRF_PSEL(SPIM_SCK, 0, 25)>,
+					<NRF_PSEL(SPIM_MOSI, 0, 14)>,
+					<NRF_PSEL(SPIM_MISO, 0, 13)>;
+			low-power-enable;
+		};
+	};
+
+ };
+
+ &i2c0 {
+     compatible = "nordic,nrf-twim";
+     status = "okay";
+     pinctrl-0 = <&i2c0_default>;
+     pinctrl-1 = <&i2c0_sleep>;
+     pinctrl-names = "default", "sleep";
+ 
+     bme280@76 {
+         compatible = "bosch,bme280";
+         reg = <0x76>;
+         label = "BME280";
+     };
+ 
+     adxl345@53 {
+         compatible = "adi,adxl345";
+         reg = <0x53>;
+         label = "ADXL345";
+     };
+ 
+     lis3mdl@1e {
+         compatible = "st,lis3mdl-magn";
+         reg = <0x1e>;
+         label = "LIS3MDL";
+     };
+ 
+     fxas21002@20 {
+         compatible = "nxp,fxas21002";
+         reg = <0x20>;
+         label = "FXAS21002";
+     };
+ 
+     lis2dh@19 {
+         compatible = "st,lis2dh";
+         reg = <0x19>;
+         label = "LIS2DH";
+     };
+ 
+
+ 
+     bq27421@55 {
+         compatible = "ti,bq274xx";
+         label = "BQ274XX";
+         reg = <0x55>;
+         design-voltage = <3700>;
+         design-capacity = <1200>;
+         taper-current = <45>;
+         terminate-voltage = <3000>;
+     };
+ };
+ 
+ 
+&spi2{
+        status = "okay";
+        cs-gpios = <&gpio0 28 GPIO_ACTIVE_LOW>;
+
+        sdhc0: sdhc@0 {
+                compatible = "zephyr,mmc-spi-slot";
+                reg = <0>;
+                status = "okay";
+                label = "SDHC0";
+                spi-max-frequency = <24000000>;
+        };
+};
+
+&spi1{
+	status = "disabled";
+};
+
+ 

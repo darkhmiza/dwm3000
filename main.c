@@ -17,17 +17,17 @@
  *   along with Zephyr-DWM1001.  If not, see <https://www.gnu.org/licenses/>.
  * 
  */
-#include <zephyr/kernel.h>
-#include <zephyr/sys/printk.h>
+#include <zephyr.h>
+#include <sys/printk.h>
 
 #include "port.h"
 
 #define LOG_LEVEL 3
-#include <zephyr/logging/log.h>
+#include <logging/log.h>
 LOG_MODULE_REGISTER(main);
 
-#define STACKSIZE 1024
-#define PRIORITY 99
+#define STACKSIZE 8192
+#define PRIORITY -1
 #define DELAY_TIME   K_MSEC(1000)
 
 extern int app_main(void);
@@ -51,3 +51,20 @@ void main_thread(void * id, void * unused1, void * unused2)
 
 K_THREAD_DEFINE(main_id, STACKSIZE, main_thread, 
                 NULL, NULL, NULL, PRIORITY, 0, 0);
+
+
+
+/*
+CONFIG_MAIN_STACK_SIZE=2048
+#CONFIG_SIZE_OPTIMIZATIONS=y
+CONFIG_NO_OPTIMIZATIONS=y
+#enable stack overflow test
+CONFIG_STACK_SENTINEL=y
+CONFIG_INIT_STACKS=y
+CONFIG_STACK_USAGE=y
+CONFIG_REBOOT=y
+
+CONFIG_DEBUG_COREDUMP=y
+CONFIG_DEBUG_COREDUMP_MEMORY_DUMP_MIN=y
+CONFIG_DEBUG_COREDUMP_BACKEND_LOGGING=y
+CONFIG_DEBUG_INFO=y*/

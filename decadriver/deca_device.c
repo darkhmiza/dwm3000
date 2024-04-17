@@ -15,10 +15,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include <zephyr/kernel.h>
-#include <zephyr/sys/printk.h>
-
-
 #include "deca_types.h"
 #include "deca_regs.h"
 #include "deca_device_api.h"
@@ -3313,7 +3309,8 @@ uint8_t dwt_checkidlerc(void)
     /* Poll DW IC until IDLE_RC event set.
      * This means that DW IC is in IDLE_RC state and ready */
     uint32_t reg = ((uint32_t)dwt_read16bitoffsetreg(SYS_STATUS_ID, 2) << 16);
-
+    
+    //return (reg);
     return ( (reg & (SYS_STATUS_RCINIT_BIT_MASK)) == (SYS_STATUS_RCINIT_BIT_MASK));
 }
 
